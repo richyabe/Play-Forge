@@ -1,0 +1,17 @@
+{
+  "name": "PlayForge - Arcade Games",
+  "short_name": "PlayForge",
+  "description": "Play Snake, 2048, Tic Tac Toe, Breakout, Pong, Flappy Bird & more",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#060610",
+  "theme_color": "#00f3ff",
+  "icons": [
+    {
+      "src": "forge play logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
