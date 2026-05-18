@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Games | PlayForge</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="flex min-h-screen">
+  <div id="sidebar-backdrop"></div>
+  <button id="sidebar-toggle" class="fixed top-4 left-4 z-50 md:hidden p-2 glass neon-border rounded-lg">
+    <svg class="w-6 h-6" style="color:var(--neon-cyan)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
+  <aside id="sidebar" class="sidebar w-64 min-h-screen glass border-r border-gray-800 flex flex-col p-6 space-y-2" style="border-radius:0">
+    <div class="flex items-center gap-3 mb-6 mt-2 md:mt-0">
+   <img src="forge play logo.png" alt="PlayForge" class="h-10 w-auto logo-glow">
+   <!-- Optional: keep text too -->
+   <!-- <h1 class="font-orbitron text-xl font-bold neon-text">PlayForge</h1> -->
+  </div>
+    <nav class="space-y-1 flex-1">
+      <a href="index.html"    class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 transition text-sm">🏠 Home</a>
+      <a href="games.html"   class="nav-link active flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 transition text-sm">🎮 All Games</a>
+      <a href="scores.html"  class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 transition text-sm">🏆 Global Scores</a>
+      <a href="settings.html" class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 transition text-sm">⚙️ Settings</a>
+    </nav>
+    <div class="text-xs text-gray-600 pt-4 border-t border-gray-800">v1.0 · 7 Games</div>
+  </aside>
+  <main class="flex-1 p-6 md:p-10">
+    <h2 class="font-orbitron text-3xl font-bold mb-8 neon-text animate-fade-in">All Games</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <a href="games/snake.html" class="glass rounded-xl p-6 neon-card block">
+        <div class="h-24 rounded-lg mb-4 flex items-center justify-center text-5xl" style="background:linear-gradient(135deg,rgba(0,255,136,.15),rgba(0,0,0,.5))">🐍</div>
+        <h3 class="font-bold text-base mb-1">Snake</h3>
+        <p class="text-gray-400 text-xs mb-3">Classic arcade survival</p>
+        <div class="text-xs text-green-400">Best: <span id="hs-snake">0</span></div>
+      </a>
+      <a href="games/tictactoe.html" class="glass rounded-xl p-6 neon-card block">
+        <div class="h-24 rounded-lg mb-4 flex items-center justify-center text-5xl" style="background:linear-gradient(135deg,rgba(180,41,249,.15),rgba(0,0,0,.5))">❌</div>
+        <h3 class="font-bold text-base mb-1">Tic Tac Toe</h3>
+        <p class="text-gray-400 text-xs mb-3">vs Smart AI</p>
+        <div class="text-xs text-purple-400">Wins: <span id="hs-ttt">0</span></div>
+      </a>
+      <a href="games/2048.html" class="glass rounded-xl p-6 neon-card block">
+        <div class="h-24 rounded-lg mb-4 flex items-center justify-center text-5xl" style="background:linear-gradient(135deg,rgba(234,179,8,.15),rgba(0,0,0,.5))">🔢</div>
+        <h3 class="font-bold text-base mb-1">2048</h3>
+        <p class="text-gray-400 text-xs mb-3">Number puzzle</p>
+        <div class="text-xs text-yellow-400">Best: <span id="hs-2048">0</span></div>
+      </a>
+      <a href="games/memory.html" class="glass rounded-xl p-6 neon-card block">
+        <div class="h-24 rounded-lg mb-4 flex items-center justify-center text-5xl" style="background:linear-gradient(135deg,rgba(59,130,246,.15),rgba(0,0,0,.5))">🃏</div>
+        <h3 class="font-bold text-base mb-1">Memory Match</h3>
+        <p class="text-gray-400 text-xs mb-3">Find the pairs</p>
+        <div class="text-xs text-blue-400">Best: <span id="hs-memory">0</span> moves</div>
+      </a>
+      <a href="games/breakout.html" class="glass rounded-xl p-6 neon-card block">
+        <div class="h-24 rounded-lg mb-4 flex items-center justify-center text-5xl" style="background:linear-gradient(135deg,rgba(239,68,68,.15),rgba(0,0,0,.5))">🧱</div>
+        <h3 class="font-bold text-base mb-1">Breakout</h3>
+        <p class="text-gray-400 text-xs mb-3">Brick breaker</p>
+        <div class="text-xs text-red-400">Best: <span id="hs-breakout">0</span></div>
+      </a>
+      <a href="games/pong.html" class="glass rounded-xl p-6 neon-card block">
+        <div class="h-24 rounded-lg mb-4 flex items-center justify-center text-5xl" style="background:linear-gradient(135deg,rgba(20,184,166,.15),rgba(0,0,0,.5))">🏓</div>
+        <h3 class="font-bold text-base mb-1">Pong</h3>
+        <p class="text-gray-400 text-xs mb-3">vs AI Ping-Pong</p>
+        <div class="text-xs text-teal-400">Best: <span id="hs-pong">0</span></div>
+      </a>
+      <a href="games/flappy.html" class="glass rounded-xl p-6 neon-card block">
+        <div class="h-24 rounded-lg mb-4 flex items-center justify-center text-5xl" style="background:linear-gradient(135deg,rgba(249,115,22,.15),rgba(0,0,0,.5))">🐦</div>
+        <h3 class="font-bold text-base mb-1">Flappy Bird</h3>
+        <p class="text-gray-400 text-xs mb-3">Dodge the pipes</p>
+        <div class="text-xs text-orange-400">Best: <span id="hs-flappy">0</span></div>
+      </a>
+    </div>
+  </main>
+  <div id="toast" class="hide"><div id="toast-msg" class="font-semibold text-sm"></div></div>
+  <script src="js/app.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', () => PlayForge.updateAllScores());</script>
+</body>
+</html>
