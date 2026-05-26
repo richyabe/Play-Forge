@@ -1,92 +1,53 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
-    <!-- PWA -->
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#00f3ff">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="apple-touch-icon" href="forge play logo.png">
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>Settings | PlayForge</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/style.css">
+  <style>.sidebar-logo{height:34px;width:auto;filter:drop-shadow(0 0 8px rgba(0,243,255,.5));}</style>
 </head>
 <body class="flex min-h-screen">
+  <button id="sidebar-toggle" class="fixed top-4 left-4 z-50 md:hidden p-2.5 glass neon-border rounded-xl" style="z-index:80"><svg class="w-5 h-5" style="color:var(--neon-cyan)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
   <div id="sidebar-backdrop"></div>
-  <button id="sidebar-toggle" class="fixed top-4 left-4 z-50 md:hidden p-2 glass neon-border rounded-lg">
-    <svg class="w-6 h-6" style="color:var(--neon-cyan)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-  </button>
-  <aside id="sidebar" class="sidebar w-64 min-h-screen glass border-r border-gray-800 flex flex-col p-6 space-y-2" style="border-radius:0">
-  <div class="flex items-center gap-3 mb-6 mt-2 md:mt-0">
-    <img src="forge play logo.png" alt="PlayForge" class="h-10 w-auto logo-glow">
-    <!-- Optional: keep text too -->
-     <!-- <h1 class="font-orbitron text-xl font-bold neon-text">PlayForge</h1> -->
- </div>
-    <nav class="space-y-1 flex-1">
-      <a href="index.html"    class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 transition text-sm">🏠 Home</a>
-      <a href="games.html"   class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 transition text-sm">🎮 All Games</a>
-      <a href="scores.html"  class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 transition text-sm">🏆 Global Scores</a>
-      <a href="settings.html" class="nav-link active flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 transition text-sm">⚙️ Settings</a>
-    </nav>
-    <div class="text-xs text-gray-600 pt-4 border-t border-gray-800">v1.0 · 7 Games</div>
+  <aside id="sidebar" class="sidebar w-64 min-h-screen glass border-r border-gray-800 flex flex-col p-5 fixed md:relative" style="z-index:62">
+    <div class="sidebar-glow"></div>
+    <div class="relative z-10 flex flex-col h-full">
+      <div class="flex items-center gap-2 mb-7 mt-8 md:mt-0"><img src="forge_play_logo.png" alt="PlayForge" class="sidebar-logo"></div>
+      <nav class="space-y-1 flex-1">
+        <a href="index.html"     class="nav-link">🏠 Home</a>
+        <a href="games.html"    class="nav-link">🎮 All Games</a>
+        <a href="scores.html"   class="nav-link">🏆 High Scores</a>
+        <a href="settings.html" class="nav-link active">⚙️ Settings</a>
+      </nav>
+      <div class="text-xs pt-4 border-t border-gray-800" style="color:var(--text-dim)">v2.0 · 9 Games</div>
+    </div>
   </aside>
-  <main class="flex-1 p-6 md:p-10">
-    <h2 class="font-orbitron text-3xl font-bold mb-8 neon-text animate-fade-in">Settings</h2>
-    <div class="glass rounded-xl p-6 max-w-xl space-y-5 animate-fade-in">
-
-      <!-- Theme toggle -->
-      <div class="flex items-center justify-between p-4 rounded-lg" style="background:var(--dark-surface)">
-        <div>
-          <div class="font-semibold text-sm">Dark / Light Mode</div>
-          <div class="text-xs text-gray-400 mt-0.5">Toggle theme appearance</div>
-        </div>
-        <button
-          id="theme-track"
-          onclick="PlayForge.toggleTheme()"
-          class="w-14 h-7 rounded-full relative transition-colors duration-300 flex-shrink-0"
-          style="background:var(--neon-cyan)">
+  <main class="flex-1" style="padding:clamp(16px,3vw,40px);padding-top:clamp(60px,5vw,40px)">
+    <h2 class="font-orbitron text-2xl md:text-3xl font-bold mb-8 neon-text animate-fade-in">Settings</h2>
+    <div class="glass rounded-2xl p-6 max-w-lg space-y-4 animate-fade-in">
+      <div class="flex items-center justify-between p-4 rounded-xl" style="background:var(--dark-surface)">
+        <div><div class="font-semibold text-sm">Dark / Light Mode</div><div class="text-xs mt-0.5" style="color:var(--text-dim)">Toggle theme appearance</div></div>
+        <button id="theme-track" onclick="PlayForge.toggleTheme()" class="w-14 h-7 rounded-full relative transition-colors duration-300 flex-shrink-0" style="background:var(--neon-cyan)">
           <div id="theme-thumb" class="w-5 h-5 bg-white rounded-full absolute top-1 left-1 transition-transform duration-300" style="transform:translateX(28px)"></div>
         </button>
       </div>
-
-      <!-- Sound toggle -->
-      <div class="flex items-center justify-between p-4 rounded-lg" style="background:var(--dark-surface)">
-        <div>
-          <div class="font-semibold text-sm">Sound Effects</div>
-          <div class="text-xs text-gray-400 mt-0.5">Enable / disable audio feedback</div>
-        </div>
-        <button
-          id="sound-track"
-          onclick="PlayForge.toggleSound()"
-          class="w-14 h-7 rounded-full relative transition-colors duration-300 flex-shrink-0"
-          style="background:var(--neon-cyan)">
+      <div class="flex items-center justify-between p-4 rounded-xl" style="background:var(--dark-surface)">
+        <div><div class="font-semibold text-sm">Sound Effects</div><div class="text-xs mt-0.5" style="color:var(--text-dim)">Enable / disable audio</div></div>
+        <button id="sound-track" onclick="PlayForge.toggleSound()" class="w-14 h-7 rounded-full relative transition-colors duration-300 flex-shrink-0" style="background:var(--neon-cyan)">
           <div id="sound-thumb" class="w-5 h-5 bg-white rounded-full absolute top-1 left-1 transition-transform duration-300" style="transform:translateX(28px)"></div>
         </button>
       </div>
-
-      <!-- Volume -->
-      <div class="p-4 rounded-lg" style="background:var(--dark-surface)">
+      <div class="p-4 rounded-xl" style="background:var(--dark-surface)">
         <div class="font-semibold text-sm mb-3">Master Volume</div>
-        <input
-          type="range" id="volume-slider" min="0" max="100" value="70"
-          class="w-full h-1.5 rounded-lg appearance-none cursor-pointer"
-          style="accent-color:var(--neon-cyan)"
-          oninput="PlayForge.setVolume(this.value)">
-        <div class="flex justify-between text-xs text-gray-500 mt-1"><span>0</span><span>100</span></div>
+        <input type="range" id="volume-slider" min="0" max="100" value="70" class="w-full h-1.5 rounded-lg appearance-none cursor-pointer" style="accent-color:var(--neon-cyan)" oninput="PlayForge.setVolume(this.value)">
+        <div class="flex justify-between text-xs mt-1" style="color:var(--text-dim)"><span>0</span><span>100</span></div>
       </div>
-
-      <!-- Reset -->
-      <button
-        onclick="if(confirm('Clear all scores and settings?')){ localStorage.clear(); location.reload(); }"
-        class="btn-primary w-full py-3 text-sm"
-        style="background:linear-gradient(135deg,#dc2626,#991b1b)">
-        ⚠️ Reset All Data
-      </button>
+      <button onclick="if(confirm('Clear all scores and settings?')){localStorage.clear();location.reload();}" class="btn-primary w-full py-3 text-sm" style="background:linear-gradient(135deg,#dc2626,#991b1b)">⚠️ Reset All Data</button>
     </div>
   </main>
-  <div id="toast" class="hide"><div id="toast-msg" class="font-semibold text-sm"></div></div>
+  <div id="toast" class="hide"><div id="toast-msg"></div></div>
   <script src="js/app.js"></script>
-  <script>document.addEventListener('DOMContentLoaded', () => PlayForge.updateSoundUI());</script>
+  <script>document.addEventListener('DOMContentLoaded',()=>PlayForge.updateSoundUI());</script>
 </body>
 </html>
