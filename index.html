@@ -1,99 +1,170 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
-    <!-- PWA -->
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#00f3ff">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="apple-touch-icon" href="forge play logo.png">
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>PlayForge | Arcade Hub</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    #pc { position:fixed;inset:0;z-index:0;pointer-events:none; }
+    aside,main { position:relative;z-index:1; }
+    aside { z-index:62; }
+    .logo-img { height:clamp(44px,10vw,90px);width:auto;filter:drop-shadow(0 0 18px rgba(0,243,255,.6)) drop-shadow(0 0 40px rgba(180,41,249,.45));animation:logoGlow 3s ease-in-out infinite alternate; }
+    @keyframes logoGlow { 0%{filter:drop-shadow(0 0 14px rgba(0,243,255,.5)) drop-shadow(0 0 36px rgba(180,41,249,.35))} 100%{filter:drop-shadow(0 0 30px rgba(0,243,255,.95)) drop-shadow(0 0 65px rgba(180,41,249,.75))} }
+    .sidebar-logo { height:36px;width:auto;filter:drop-shadow(0 0 8px rgba(0,243,255,.5)); }
+    .counter-num { display:inline-block;font-family:'Orbitron',sans-serif;font-weight:700;font-size:clamp(1.4rem,3vw,2rem);color:var(--neon-cyan); }
+    .stat-label  { font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#3a4460;margin-top:2px; }
+    .divider     { width:1px;height:32px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,.12),transparent); }
+    .float-icon  { position:absolute;font-size:1.4rem;opacity:.12;animation:floatIcon linear infinite;pointer-events:none;user-select:none; }
+    @keyframes floatIcon { 0%{transform:translateY(0) rotate(0deg);opacity:.12} 50%{opacity:.22} 100%{transform:translateY(-65px) rotate(16deg);opacity:0} }
+    .aurora-blob { position:absolute;border-radius:50%;pointer-events:none;filter:blur(65px);animation:auroraFloat ease-in-out infinite alternate; }
+    @keyframes auroraFloat { 0%{transform:scale(1) translate(0,0)} 100%{transform:scale(1.14) translate(18px,-22px)} }
+    .scanline { position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,243,255,.012) 3px,transparent 4px);pointer-events:none;z-index:3;border-radius:inherit; }
+    @media(max-width:768px){ .hero-section{ padding: 32px 16px 28px !important; } }
+  </style>
 </head>
 <body class="flex min-h-screen">
+  <div id="page-flash"></div>
+  <canvas id="pc"></canvas>
 
-  <div id="sidebar-backdrop"></div>
-  <button id="sidebar-toggle" class="fixed top-4 left-4 z-50 md:hidden p-2 glass neon-border rounded-lg">
-    <svg class="w-6 h-6" style="color:var(--neon-cyan)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <button id="sidebar-toggle" class="fixed top-4 left-4 z-50 md:hidden p-2.5 glass neon-border rounded-xl" style="z-index:80">
+    <svg class="w-5 h-5" style="color:var(--neon-cyan)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
     </svg>
   </button>
+  <div id="sidebar-backdrop"></div>
 
-  <aside id="sidebar" class="sidebar w-64 min-h-screen glass border-r border-gray-800 flex flex-col p-6 space-y-2" style="border-radius:0">
-    <div class="flex items-center gap-3 mb-6 mt-2 md:mt-0">
-    <img src="forge play logo.png" alt="PlayForge" class="h-10 w-auto logo-glow">
-    <!-- Optional: keep text too -->
-     <!-- <h1 class="font-orbitron text-xl font-bold neon-text">PlayForge</h1> -->
-  </div>
-    <nav class="space-y-1 flex-1">
-      <a href="index.html"    class="nav-link active flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 transition text-sm">🏠 Home</a>
-      <a href="games.html"   class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 transition text-sm">🎮 All Games</a>
-      <a href="scores.html"  class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 transition text-sm">🏆 Global Scores</a>
-      <a href="settings.html" class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 transition text-sm">⚙️ Settings</a>
-    </nav>
-    <div class="text-xs text-gray-600 pt-4 border-t border-gray-800">v1.0 · 7 Games</div>
+  <aside id="sidebar" class="sidebar w-64 min-h-screen glass border-r border-gray-800 flex flex-col p-5 fixed md:relative">
+    <div class="sidebar-glow"></div>
+    <div class="relative z-10 flex flex-col h-full">
+      <div class="flex items-center gap-2 mb-7 mt-8 md:mt-0">
+        <img src="forge_play_logo.png" alt="PlayForge" class="sidebar-logo">
+      </div>
+      <nav class="space-y-1 flex-1">
+        <a href="index.html"     class="nav-link active">🏠 Home</a>
+        <a href="games.html"    class="nav-link">🎮 All Games</a>
+        <a href="scores.html"   class="nav-link">🏆 High Scores</a>
+        <a href="settings.html" class="nav-link">⚙️ Settings</a>
+      </nav>
+      <div class="text-xs pt-4 border-t border-gray-800" style="color:var(--text-dim)">v2.0 · 9 Games</div>
+    </div>
   </aside>
 
-  <main class="flex-1 p-6 md:p-10">
-    <section class="text-center mb-14 pt-8 animate-fade-in">
-      <div class="inline-block mb-4 px-4 py-1 rounded-full text-xs font-semibold tracking-widest uppercase" style="background:rgba(0,243,255,.1);color:var(--neon-cyan);border:1px solid rgba(0,243,255,.25)">Browser Arcade Hub</div>
-      <h2 class="font-orbitron text-4xl md:text-6xl font-bold mb-4 neon-text">PlayForge</h2>
-      <p class="text-lg text-gray-400 max-w-xl mx-auto mb-8">7 classic games. Persistent high scores. Zero install required.</p>
-      <a href="games.html" class="btn-primary text-base px-8 py-3">Start Playing →</a>
+  <main class="flex-1 overflow-hidden" style="padding:clamp(16px,3vw,40px);padding-top:clamp(60px,5vw,40px)">
+
+    <!-- HERO -->
+    <section class="hero-section text-center mb-12 relative overflow-hidden rounded-2xl py-10 px-4" style="background:rgba(0,243,255,.022);border:1px solid rgba(0,243,255,.09)">
+      <div class="scanline"></div>
+      <div class="aurora-blob" style="width:300px;height:300px;background:rgba(0,243,255,.1);top:-90px;left:-70px;animation-duration:7s"></div>
+      <div class="aurora-blob" style="width:250px;height:250px;background:rgba(180,41,249,.13);bottom:-60px;right:-40px;animation-duration:9s;animation-delay:-.5s"></div>
+      <div class="aurora-blob" style="width:160px;height:160px;background:rgba(255,45,120,.07);top:30%;left:60%;animation-duration:6s;animation-delay:-2s"></div>
+      <span class="float-icon" style="left:6%;top:55%;animation-duration:7s">🐍</span>
+      <span class="float-icon" style="left:14%;top:30%;animation-duration:10s;animation-delay:2s">🎮</span>
+      <span class="float-icon" style="right:8%;top:45%;animation-duration:8s;animation-delay:1s">🚀</span>
+      <span class="float-icon" style="right:18%;top:65%;animation-duration:11s;animation-delay:3s">💎</span>
+      <span class="float-icon" style="left:48%;top:72%;animation-duration:6s;animation-delay:1.5s">⚡</span>
+
+      <div class="relative z-10 animate-fade-in">
+        <div class="hero-badge mb-5">Browser Arcade Hub</div>
+        <div class="flex justify-center mb-5">
+          <img src="forge_play_logo.png" alt="PlayForge" class="logo-img">
+        </div>
+        <p class="text-sm md:text-base max-w-md mx-auto mb-8 leading-relaxed" style="color:var(--text-dim)">9 hand-crafted games. No install needed. Pure arcade energy.</p>
+        <div class="flex items-center justify-center gap-5 md:gap-10 mb-9 flex-wrap">
+          <div class="text-center"><div class="counter-num" id="total-plays">0</div><div class="stat-label">Total Plays</div></div>
+          <div class="divider hidden sm:block"></div>
+          <div class="text-center"><div class="counter-num">9</div><div class="stat-label">Games</div></div>
+          <div class="divider hidden sm:block"></div>
+          <div class="text-center"><div class="counter-num">∞</div><div class="stat-label">Replayable</div></div>
+        </div>
+        <a href="games.html" class="btn-primary px-8 md:px-12 py-3 md:py-4 font-orbitron tracking-wide" style="font-size:clamp(.7rem,2vw,.85rem)">Start Playing →</a>
+      </div>
     </section>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto animate-fade-in">
-      <a href="games/snake.html" class="glass rounded-xl p-6 neon-card block">
-        <div class="w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-2xl" style="background:rgba(0,255,136,.1)">🐍</div>
-        <h3 class="font-bold text-lg mb-1">Snake</h3>
-        <p class="text-gray-400 text-sm mb-3">Classic grid survival. Eat, grow, don't hit yourself.</p>
-        <div class="text-xs font-semibold" style="color:var(--neon-cyan)">Best: <span id="hs-snake">0</span></div>
+    <!-- GAMES GRID -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto mb-8">
+      <a href="games/runner.html" class="glass rounded-xl p-5 neon-card card-stagger block">
+        <div class="flex items-start justify-between mb-3">
+          <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl" style="background:linear-gradient(135deg,rgba(255,119,0,.25),rgba(255,45,120,.15))">🏃</div>
+          <span class="badge-new">New</span>
+        </div>
+        <h3 class="font-bold text-base mb-1">Neon Dash</h3>
+        <p class="text-xs mb-3 leading-relaxed" style="color:var(--text-dim)">Sprint through neon city. Double-jump, slide, dodge obstacles forever.</p>
+        <div class="flex items-center justify-between">
+          <div class="text-xs font-semibold text-orange-400">Best: <span id="hs-runner">0</span>m</div>
+          <div class="text-xs" style="color:var(--text-dim)">Tap / Space</div>
+        </div>
       </a>
-      <a href="games/tictactoe.html" class="glass rounded-xl p-6 neon-card block">
-        <div class="w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-2xl" style="background:rgba(180,41,249,.1)">❌</div>
-        <h3 class="font-bold text-lg mb-1">Tic Tac Toe</h3>
-        <p class="text-gray-400 text-sm mb-3">Challenge an unbeatable minimax AI.</p>
-        <div class="text-xs font-semibold" style="color:var(--neon-purple)">Wins: <span id="hs-ttt">0</span></div>
+      <a href="games/asteroids.html" class="glass rounded-xl p-5 neon-card card-stagger block">
+        <div class="flex items-start justify-between mb-3">
+          <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl" style="background:linear-gradient(135deg,rgba(0,243,255,.2),rgba(180,41,249,.15))">🚀</div>
+          <span class="badge-new">New</span>
+        </div>
+        <h3 class="font-bold text-base mb-1">Asteroid Blaster</h3>
+        <p class="text-xs mb-3 leading-relaxed" style="color:var(--text-dim)">Pilot your ship, blast rocks, survive endless waves.</p>
+        <div class="flex items-center justify-between">
+          <div class="text-xs font-semibold" style="color:var(--neon-cyan)">Best: <span id="hs-asteroids">0</span></div>
+          <div class="text-xs" style="color:var(--text-dim)">WASD + Tap</div>
+        </div>
       </a>
-      <a href="games/2048.html" class="glass rounded-xl p-6 neon-card block">
-        <div class="w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-2xl" style="background:rgba(234,179,8,.1)">🔢</div>
-        <h3 class="font-bold text-lg mb-1">2048</h3>
-        <p class="text-gray-400 text-sm mb-3">Slide tiles to merge numbers. Reach 2048!</p>
+      <a href="games/snake.html" class="glass rounded-xl p-5 neon-card card-stagger block">
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl mb-3" style="background:rgba(0,255,136,.1)">🐍</div>
+        <h3 class="font-bold text-base mb-1">Snake</h3>
+        <p class="text-xs mb-3 leading-relaxed" style="color:var(--text-dim)">Eat, grow, don't hit yourself.</p>
+        <div class="text-xs font-semibold text-green-400">Best: <span id="hs-snake">0</span></div>
+      </a>
+      <a href="games/2048.html" class="glass rounded-xl p-5 neon-card card-stagger block">
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl mb-3" style="background:rgba(234,179,8,.1)">🔢</div>
+        <h3 class="font-bold text-base mb-1">2048</h3>
+        <p class="text-xs mb-3 leading-relaxed" style="color:var(--text-dim)">Slide tiles, merge numbers. Reach 2048!</p>
         <div class="text-xs font-semibold text-yellow-400">Best: <span id="hs-2048">0</span></div>
       </a>
-      <a href="games/memory.html" class="glass rounded-xl p-6 neon-card block">
-        <div class="w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-2xl" style="background:rgba(59,130,246,.1)">🃏</div>
-        <h3 class="font-bold text-lg mb-1">Memory Match</h3>
-        <p class="text-gray-400 text-sm mb-3">Flip cards and find matching pairs.</p>
-        <div class="text-xs font-semibold text-blue-400">Best: <span id="hs-memory">0</span> moves</div>
-      </a>
-      <a href="games/breakout.html" class="glass rounded-xl p-6 neon-card block">
-        <div class="w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-2xl" style="background:rgba(239,68,68,.1)">🧱</div>
-        <h3 class="font-bold text-lg mb-1">Breakout</h3>
-        <p class="text-gray-400 text-sm mb-3">Smash all bricks before they escape.</p>
+      <a href="games/breakout.html" class="glass rounded-xl p-5 neon-card card-stagger block">
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl mb-3" style="background:rgba(239,68,68,.1)">🧱</div>
+        <h3 class="font-bold text-base mb-1">Breakout</h3>
+        <p class="text-xs mb-3 leading-relaxed" style="color:var(--text-dim)">Smash every brick. Don't let the ball drop.</p>
         <div class="text-xs font-semibold text-red-400">Best: <span id="hs-breakout">0</span></div>
       </a>
-      <a href="games/pong.html" class="glass rounded-xl p-6 neon-card block">
-        <div class="w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-2xl" style="background:rgba(20,184,166,.1)">🏓</div>
-        <h3 class="font-bold text-lg mb-1">Pong</h3>
-        <p class="text-gray-400 text-sm mb-3">First to 5 points wins vs AI.</p>
-        <div class="text-xs font-semibold text-teal-400">Best: <span id="hs-pong">0</span></div>
-      </a>
-      <a href="games/flappy.html" class="glass rounded-xl p-6 neon-card block">
-        <div class="w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-2xl" style="background:rgba(249,115,22,.1)">🐦</div>
-        <h3 class="font-bold text-lg mb-1">Flappy Bird</h3>
-        <p class="text-gray-400 text-sm mb-3">Tap to flap, dodge every pipe.</p>
+      <a href="games/flappy.html" class="glass rounded-xl p-5 neon-card card-stagger block">
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl mb-3" style="background:rgba(249,115,22,.1)">🐦</div>
+        <h3 class="font-bold text-base mb-1">Flappy Bird</h3>
+        <p class="text-xs mb-3 leading-relaxed" style="color:var(--text-dim)">One tap at a time. Dodge every pipe.</p>
         <div class="text-xs font-semibold text-orange-400">Best: <span id="hs-flappy">0</span></div>
       </a>
     </div>
+
+    <div class="text-center animate-fade-in-slow">
+      <a href="games.html" class="btn-ghost px-8 py-3 text-sm">View all 9 games →</a>
+    </div>
   </main>
 
-  <div id="toast" class="hide"><div id="toast-msg" class="font-semibold text-sm"></div></div>
-
+  <div id="toast" class="hide"><div id="toast-msg"></div></div>
   <script src="js/app.js"></script>
-  <script>document.addEventListener('DOMContentLoaded', () => PlayForge.updateAllScores());</script>
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    PlayForge.updateAllScores();
+    const ids = ['snake','ttt','2048','memory','breakout','pong','flappy','runner','asteroids'];
+    const total = ids.reduce((s,id)=>s+(parseInt(localStorage.getItem('pf_plays_'+id)||0)),0);
+    const el = document.getElementById('total-plays');
+    if(el && total>0){let c=0;const step=Math.max(1,Math.floor(total/40)),t=setInterval(()=>{c=Math.min(c+step,total);el.textContent=c;if(c>=total)clearInterval(t)},30);}
+    initParticles();
+  });
+  function initParticles(){
+    const cv=document.getElementById('pc');if(!cv)return;
+    const ctx=cv.getContext('2d');let W,H;
+    const cols=['rgba(0,243,255,','rgba(180,41,249,','rgba(0,255,136,','rgba(255,45,120,'];
+    const pts=Array.from({length:55},()=>({x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,r:Math.random()*1.4+.3,dx:(Math.random()-.5)*.35,dy:(Math.random()-.5)*.35,col:cols[Math.floor(Math.random()*cols.length)],alpha:Math.random()*.32+.08,pulse:Math.random()*Math.PI*2,ps:.018+Math.random()*.02}));
+    function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;}
+    resize();window.addEventListener('resize',resize);
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      for(const p of pts){p.x+=p.dx;p.y+=p.dy;p.pulse+=p.ps;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;const a=p.alpha*(0.65+0.35*Math.sin(p.pulse));ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.col+a+')';ctx.fill();}
+      for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<110){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle='rgba(0,243,255,'+(0.045*(1-d/110))+')';ctx.lineWidth=.4;ctx.stroke();}}
+      requestAnimationFrame(draw);
+    }
+    draw();
+  }
+  </script>
 </body>
 </html>
