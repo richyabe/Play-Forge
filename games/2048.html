@@ -1,50 +1,46 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
-  <!-- PWA -->
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#00f3ff">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="apple-touch-icon" href="/forge play logo.png">
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>2048 | PlayForge</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="../css/style.css">
+  <style>.sidebar-logo{height:34px;width:auto;filter:drop-shadow(0 0 8px rgba(0,243,255,.5));}</style>
 </head>
 <body class="flex min-h-screen">
+  <button id="sidebar-toggle" class="fixed top-4 left-4 z-50 md:hidden p-2.5 glass neon-border rounded-xl" style="z-index:80"><svg class="w-5 h-5" style="color:var(--neon-cyan)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
   <div id="sidebar-backdrop"></div>
-  <button id="sidebar-toggle" class="fixed top-4 left-4 z-50 md:hidden p-2 glass neon-border rounded-lg">
-    <svg class="w-6 h-6" style="color:var(--neon-cyan)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-  </button>
-  <aside id="sidebar" class="sidebar w-64 min-h-screen glass border-r border-gray-800 flex flex-col p-6 space-y-2" style="border-radius:0">
-    <div class="flex items-center gap-3 mb-6">
-      <div class="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-white text-sm" style="background:linear-gradient(135deg,var(--neon-cyan),var(--neon-purple))">PF</div>
-      <h1 class="font-orbitron text-xl font-bold neon-text">PlayForge</h1>
+  <aside id="sidebar" class="sidebar w-64 min-h-screen glass border-r border-gray-800 flex flex-col p-5 fixed md:relative" style="z-index:62">
+    <div class="sidebar-glow"></div>
+    <div class="relative z-10 flex flex-col h-full">
+      <div class="flex items-center gap-2 mb-7 mt-8 md:mt-0"><img src="../forge_play_logo.png" alt="PlayForge" class="sidebar-logo"></div>
+      <nav class="space-y-1 flex-1">
+        <a href="../index.html"    class="nav-link">🏠 Home</a>
+        <a href="../games.html"   class="nav-link active">🎮 All Games</a>
+        <a href="../scores.html"  class="nav-link">🏆 High Scores</a>
+        <a href="../settings.html" class="nav-link">⚙️ Settings</a>
+      </nav>
     </div>
-    <nav class="space-y-1 flex-1">
-      <a href="../index.html"    class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 transition text-sm">🏠 Home</a>
-      <a href="../games.html"   class="nav-link active flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 transition text-sm">🎮 All Games</a>
-      <a href="../scores.html"  class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 transition text-sm">🏆 Global Scores</a>
-      <a href="../settings.html" class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 transition text-sm">⚙️ Settings</a>
-    </nav>
   </aside>
-  <main class="flex-1 p-6 md:p-10 flex items-center justify-center">
-    <div class="w-full max-w-sm animate-fade-in text-center">
-      <h1 class="font-orbitron text-3xl font-bold mb-4 text-yellow-400">2048</h1>
-      <div class="flex justify-between mb-4 text-sm font-mono px-1">
-        <span>Score: <b id="game-score" style="color:var(--neon-cyan)">0</b></span>
-        <span class="text-gray-400">Best: <b id="game-hs">0</b></span>
+  <main class="flex-1 flex flex-col items-center justify-center" style="padding:clamp(12px,2vw,32px);padding-top:clamp(56px,4vw,32px)">
+    <div class="w-full animate-fade-in" style="max-width:400px">
+      <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+        <h1 class="font-orbitron text-xl md:text-2xl font-bold text-yellow-400">🔢 2048</h1>
+        <div class="flex gap-4 text-sm font-mono"><span>Score: <b id="game-score" style="color:var(--neon-cyan)">0</b></span><span style="color:var(--text-dim)">Best: <b id="game-hs">0</b></span></div>
       </div>
-      <div id="grid-2048" class="grid-2048 mb-6"></div>
-      <div class="flex justify-center gap-4">
-        <button onclick="window.currentGame.restart()" class="btn-primary px-6 py-2">Restart</button>
-        <a href="../games.html" class="btn-ghost">Back</a>
+      <div class="w-full mb-4 flex flex-col items-center">
+        <div id="grid-2048" class="grid-2048 mb-4"></div>
+        
       </div>
-      <p class="text-xs text-gray-500 mt-4">Arrow Keys / WASD to slide tiles</p>
+      <div class="flex justify-between flex-wrap gap-2">
+        <button onclick="window.currentGame.restart()" class="btn-ghost">🔄 Restart</button>
+        <button onclick="window.currentGame.pause()"   class="btn-ghost">⏸ Pause</button>
+        <a href="../games.html" class="btn-ghost">🔙 Back</a>
+      </div>
+      <p class="text-xs mt-3 text-center" style="color:var(--text-dim)">Swipe or Arrow Keys to slide tiles</p>
     </div>
   </main>
-  <div id="toast" class="hide"><div id="toast-msg" class="font-semibold text-sm"></div></div>
+  <div id="toast" class="hide"><div id="toast-msg"></div></div>
   <script src="../js/app.js"></script>
   <script src="2048.js"></script>
 </body>
